@@ -32,7 +32,7 @@ const https = require('https');
 const fs = require('fs');
 
 // CHANGE THIS VAR TO DOWNLOAD ANIMATIONS FOR A DIFFERENT CHARACTER
-
+// const character = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
 const character = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
 const folderName = character;
 if (!fs.existsSync(folderName)){
@@ -49,9 +49,9 @@ var oldAnimId = ""
 var onlyPrintDownloadLinkInConsole = false;
 
 
-const generate_file_name = (characterId, product_name) => {
+const generate_file_name = (characterId, product_name, animId) => {
     const clean_product_name = product_name.replace(/[.\W_]+/g," ");
-    let fileName = characterId + '@' + clean_product_name + '.fbx';
+    let fileName = characterId + '@' + clean_product_name + '-' + animId + '.fbx';
     const filePath = folderName + '/' + fileName;
     console.log('FileName: ', filePath);
     return filePath;
@@ -104,7 +104,7 @@ const downloadAnimation = (animId, character, product_name) => {
 
     // if file exists, we assume that the animation is already downloaded!
     const characterId = character;
-    const filePathToWrite = generate_file_name(characterId, product_name);
+    const filePathToWrite = generate_file_name(characterId, product_name, animId);
     if (fs.existsSync(filePathToWrite))
     {
         return Promise.resolve('This animation is already downloaded!');
@@ -294,7 +294,7 @@ const monitorAnimation = (characterId,animId, product_name) => {
 							{
 								console.log('Downloading ', product_name);
 								//downloadingTab.location.href = msg.job_result;
-								await download(msg.job_result, characterId, product_name);
+								await download(msg.job_result, characterId, product_name, animId);
                                 console.log("download process finished.");
                                 return msg.job_result;
 							}
@@ -329,10 +329,10 @@ function getNameFromURL(url){
 
 
 
-const download = (path, characterId, product_name, ) => {
+const download = (path, characterId, product_name, animId) => {
     return new Promise((resolve, reject) => {
         
-        const filePath = generate_file_name(characterId, product_name);
+        const filePath = generate_file_name(characterId, product_name, animId);
 
         try
         {
